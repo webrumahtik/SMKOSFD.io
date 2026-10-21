@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OSFD - OSIS SMK Daarut Tauhiid Full Day</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif}
+  :root{
+    --primary:#0d7a5f;
+    --secondary:#f4b400;
+    --dark:#1a3a3a;
+    --light:#f5f9f8;
+    --white:#fff;
+    --shadow:0 4px 20px rgba(0,0,0,.1);
+  }
+  body{background:var(--light);color:var(--dark);line-height:1.6}
+
+  /* ===== NAVBAR ===== */
+  nav{
+    position:fixed;top:0;width:100%;background:var(--primary);
+    padding:15px 5%;display:flex;justify-content:space-between;align-items:center;
+    z-index:1000;box-shadow:var(--shadow);
+  }
+  nav .logo{color:var(--white);font-size:1.3rem;font-weight:bold}
+  nav .logo span{color:var(--secondary)}
+  nav ul{display:flex;list-style:none;gap:25px}
+  nav ul a{color:var(--white);text-decoration:none;font-weight:500;transition:.3s}
+  nav ul a:hover{color:var(--secondary)}
+  .menu-toggle{display:none;color:#fff;font-size:1.8rem;cursor:pointer;background:none;border:none}
+
+  /* ===== HERO ===== */
+  .hero{
+    min-height:100vh;display:flex;align-items:center;justify-content:center;
+    text-align:center;color:#fff;padding:100px 20px 50px;
+    position:relative;overflow:hidden;transition:background .5s;
+  }
+  .hero::before{
+    content:'';position:absolute;width:500px;height:500px;
+    background:var(--secondary);border-radius:50%;opacity:.08;
+    top:-150px;right:-150px;pointer-events:none;
+  }
+  .hero::after{
+    content:'';position:absolute;width:300px;height:300px;
+    background:var(--secondary);border-radius:50%;opacity:.06;
+    bottom:-80px;left:-80px;pointer-events:none;
+  }
+  .hero-content{position:relative;z-index:2;max-width:800px}
+  .hero h1{font-size:3.2rem;margin-bottom:10px;animation:fadeUp .8s}
+  .hero h1 span{color:var(--secondary)}
+  .hero .hero-subtitle{font-size:1.5rem;font-weight:300;margin-bottom:15px;animation:fadeUp 1s;opacity:.95}
+  .hero .hero-desc{font-size:1.05rem;max-width:650px;margin:0 auto 30px;animation:fadeUp 1.2s;opacity:.85}
+  .hero .hero-tags{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:30px;animation:fadeUp 1.3s}
+  .hero .hero-tags span{
+    background:rgba(255,255,255,.15);backdrop-filter:blur(5px);
+    padding:6px 18px;border-radius:20px;font-size:.9rem;border:1px solid rgba(255,255,255,.2);
+  }
+  .hero .btn-hero{
+    background:var(--secondary);color:var(--dark);padding:14px 35px;
+    border:none;border-radius:30px;font-weight:bold;cursor:pointer;
+    text-decoration:none;display:inline-block;transition:.3s;font-size:1rem;
+    animation:fadeUp 1.4s;
+  }
+  .hero .btn-hero:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.3)}
+  .hero .edit-hero-btn{
+    position:absolute;top:20px;right:20px;z-index:10;
+    background:var(--secondary);color:var(--dark);border:none;
+    padding:10px 20px;border-radius:25px;cursor:pointer;
+    font-weight:bold;font-size:.9rem;display:none;transition:.3s;
+  }
+  .hero .edit-hero-btn:hover{transform:scale(1.05)}
+  body.admin-mode .hero .edit-hero-btn{display:inline-flex;align-items:center;gap:6px}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ===== SECTION ===== */
+  section{padding:80px 5%}
+  .section-title{text-align:center;margin-bottom:50px}
+  .section-title h2{font-size:2.3rem;color:var(--primary);margin-bottom:10px}
+  .section-title p{color:#666}
+  .section-title::after{
+    content:'';display:block;width:80px;height:4px;
+    background:var(--secondary);margin:15px auto 0;border-radius:2px;
+  }
+
+  /* ===== VISI MISI ===== */
+  .vm-container{display:grid;grid-template-columns:1fr 1fr;gap:30px;max-width:1100px;margin:auto}
+  .vm-card{
+    background:var(--white);padding:35px;border-radius:15px;
+    box-shadow:var(--shadow);border-top:5px solid var(--primary);position:relative;
+  }
+  .vm-card h3{color:var(--primary);margin-bottom:15px;font-size:1.6rem}
+  .vm-card p,.vm-card li{color:#444}
+  .vm-card ul{padding-left:20px;margin-top:10px}
+  .vm-card li{margin-bottom:8px}
+
+  /* ===== PROGRAM KERJA ===== */
+  .pk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;max-width:1200px;margin:auto}
+  .pk-card{
+    background:var(--white);padding:25px;border-radius:12px;
+    box-shadow:var(--shadow);transition:.3s;position:relative;
+  }
+  .pk-card:hover{transform:translateY(-5px)}
+  .pk-card .pk-num{
+    position:absolute;top:-15px;left:20px;
+    background:var(--secondary);color:var(--dark);
+    width:40px;height:40px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-weight:bold;
+  }
+  .pk-card h4{color:var(--primary);margin:15px 0 10px}
+
+  /* ===== GALERI ===== */
+  .galeri-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:15px;max-width:1200px;margin:auto}
+  .galeri-item{
+    position:relative;border-radius:12px;overflow:hidden;
+    aspect-ratio:1;box-shadow:var(--shadow);cursor:pointer;
+  }
+  .galeri-item img{width:100%;height:100%;object-fit:cover;transition:.4s}
+  .galeri-item:hover img{transform:scale(1.1)}
+  .galeri-item .caption{
+    position:absolute;bottom:0;left:0;right:0;
+    background:linear-gradient(transparent,rgba(0,0,0,.8));
+    color:#fff;padding:15px;font-size:.9rem;
+  }
+
+  /* ===== KABINET ===== */
+  .kabinet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:25px;max-width:1200px;margin:auto}
+  .kabinet-card{
+    background:var(--white);border-radius:15px;overflow:hidden;
+    box-shadow:var(--shadow);text-align:center;transition:.3s;position:relative;
+  }
+  .kabinet-card:hover{transform:translateY(-5px)}
+  .kabinet-card .foto{
+    width:100%;aspect-ratio:1;
+    background:linear-gradient(135deg,var(--primary),var(--dark));
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:3rem;font-weight:bold;
+    background-size:cover;background-position:center;
+  }
+  .kabinet-card .info{padding:20px}
+  .kabinet-card h4{color:var(--primary);margin-bottom:5px}
+  .kabinet-card .jabatan{color:var(--secondary);font-weight:600;font-size:.9rem}
+  .kabinet-card .kelas{color:#888;font-size:.85rem;margin-top:5px}
+
+  /* ===== SOSMED ===== */
+  .sosmed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;max-width:1000px;margin:auto}
+  .sosmed-card{
+    background:var(--white);padding:20px;border-radius:12px;
+    box-shadow:var(--shadow);display:flex;align-items:center;gap:15px;
+    text-decoration:none;color:var(--dark);transition:.3s;position:relative;
+  }
+  .sosmed-card:hover{transform:translateX(5px);background:var(--primary);color:#fff}
+  .sosmed-card .icon{
+    width:50px;height:50px;border-radius:50%;
+    background:var(--primary);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.1rem;font-weight:bold;flex-shrink:0;
+  }
+  .sosmed-card:hover .icon{background:var(--secondary);color:var(--dark)}
+  .sosmed-card .nama{font-weight:bold}
+  .sosmed-card .url{font-size:.8rem;opacity:.7;word-break:break-all}
+
+  /* ===== FOOTER ===== */
+  footer{background:var(--dark);color:#ccc;text-align:center;padding:30px 20px}
+  footer span{color:var(--secondary)}
+
+  /* ===== ADMIN FAB ===== */
+  .admin-fab{
+    position:fixed;bottom:25px;right:25px;
+    background:var(--secondary);color:var(--dark);
+    width:60px;height:60px;border-radius:50%;
+    border:none;cursor:pointer;font-size:1.5rem;
+    box-shadow:0 5px 20px rgba(0,0,0,.3);z-index:999;transition:.3s;
+  }
+  .admin-fab:hover{transform:scale(1.1)}
+
+  /* ===== MODAL ===== */
+  .modal-overlay{
+    display:none;position:fixed;inset:0;
+    background:rgba(0,0,0,.6);z-index:2000;
+    align-items:center;justify-content:center;padding:20px;
+  }
+  .modal-overlay.active{display:flex}
+  .modal{
+    background:#fff;border-radius:15px;padding:30px;
+    max-width:550px;width:100%;max-height:90vh;overflow-y:auto;
+  }
+  .modal h3{color:var(--primary);margin-bottom:20px}
+  .modal label{display:block;margin:12px 0 5px;font-weight:600;font-size:.9rem}
+  .modal input,.modal textarea,.modal select{
+    width:100%;padding:10px;border:1px solid #ddd;
+    border-radius:8px;font-size:.95rem;font-family:inherit;
+  }
+  .modal textarea{min-height:80px;resize:vertical}
+  .modal .btn-group{display:flex;gap:10px;margin-top:20px}
+  .modal button{
+    flex:1;padding:10px;border:none;border-radius:8px;
+    cursor:pointer;font-weight:bold;transition:.3s;font-size:.95rem;
+  }
+  .btn-save{background:var(--primary);color:#fff}
+  .btn-save:hover{opacity:.9}
+  .btn-cancel{background:#ccc;color:#333}
+  .btn-cancel:hover{background:#bbb}
+  .btn-delete{background:#e74c3c;color:#fff}
+  .btn-delete:hover{opacity:.9}
+  .modal .color-row{display:flex;gap:10px;align-items:center}
+  .modal .color-row input[type="color"]{
+    width:50px;height:40px;padding:2px;border:1px solid #ddd;border-radius:8px;cursor:pointer;
+  }
+  .modal .color-row input[type="text"]{flex:1}
+  .modal .hint{font-size:.8rem;color:#999;margin-top:3px}
+
+  /* ===== EDIT / ADD BUTTONS ===== */
+  .edit-btn{
+    position:absolute;top:10px;right:10px;
+    background:var(--secondary);color:var(--dark);
+    border:none;width:34px;height:34px;border-radius:50%;
+    cursor:pointer;font-size:.9rem;display:none;z-index:5;
+    box-shadow:0 2px 8px rgba(0,0,0,.2);transition:.3s;
+  }
+  .edit-btn:hover{transform:scale(1.15)}
+  body.admin-mode .edit-btn{display:flex;align-items:center;justify-content:center}
+  .add-btn{
+    display:none;background:transparent;color:var(--primary);
+    border:2px dashed var(--primary);padding:18px;
+    border-radius:12px;cursor:pointer;font-weight:bold;
+    text-align:center;transition:.3s;font-size:1rem;
+  }
+  .add-btn:hover{background:var(--secondary);color:var(--dark);border-color:var(--secondary)}
+  body.admin-mode .add-btn{display:block}
+
+  /* ===== RESPONSIVE ===== */
+  @media(max-width:768px){
+    nav ul{
+      display:none;position:absolute;top:100%;left:0;right:0;
+      background:var(--primary);flex-direction:column;padding:20px;gap:15px;
+    }
+    nav ul.show{display:flex}
+    .menu-toggle{display:block}
+    .hero h1{font-size:2rem}
+    .hero .hero-subtitle{font-size:1.1rem}
+    .vm-container{grid-template-columns:1fr}
+    .section-title h2{font-size:1.7rem}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav>
+  <div class="logo">OS<span>FD</span> · Daarut Tauhiid</div>
+  <ul id="navMenu">
+    <li><a href="#home">Beranda</a></li>
+    <li><a href="#visimisi">Visi Misi</a></li>
+    <li><a href="#proker">Program Kerja</a></li>
+    <li><a href="#galeri">Galeri</a></li>
+    <li><a href="#kabinet">Kabinet</a></li>
+    <li><a href="#sosmed">Sosial Media</a></li>
+  </ul>
+  <button class="menu-toggle" onclick="document.getElementById('navMenu').classList.toggle('show')">☰</button>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="home">
+  <button class="edit-hero-btn" onclick="openHeroModal()">✎ Edit Tampilan</button>
+  <div class="hero-content">
+    <h1 id="heroTitle"></h1>
+    <div class="hero-subtitle" id="heroSubtitle"></div>
+    <div class="hero-desc" id="heroDesc"></div>
+    <div class="hero-tags" id="heroTags"></div>
+    <a href="#" class="btn-hero" id="heroBtn"></a>
+  </div>
+</section>
+
+<!-- ===== VISI MISI ===== -->
+<section id="visimisi">
+  <div class="section-title"><h2>Visi & Misi</h2><p>Landasan gerak OSFD</p></div>
+  <div class="vm-container">
+    <div class="vm-card">
+      <button class="edit-btn" onclick="editVM('visi')">✎</button>
+      <h3>🎯 Visi</h3>
+      <p id="visiText"></p>
+    </div>
+    <div class="vm-card">
+      <button class="edit-btn" onclick="editVM('misi')">✎</button>
+      <h3>🚀 Misi</h3>
+      <ul id="misiList"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROGRAM KERJA ===== -->
+<section id="proker" style="background:#eaf4f1">
+  <div class="section-title"><h2>Program Kerja</h2><p>Rangkaian kegiatan OSFD</p></div>
+  <div class="pk-grid" id="pkGrid"></div>
+  <div style="max-width:1200px;margin:20px auto 0">
+    <div class="add-btn" onclick="openPKModal()">+ Tambah Program Kerja</div>
+  </div>
+</section>
+
+<!-- ===== GALERI ===== -->
+<section id="galeri">
+  <div class="section-title"><h2>Galeri Kegiatan</h2><p>Dokumentasi momen OSFD</p></div>
+  <div class="galeri-grid" id="galeriGrid"></div>
+  <div style="max-width:1200px;margin:20px auto 0">
+    <div class="add-btn" onclick="openGaleriModal()">+ Tambah Foto</div>
+  </div>
+</section>
+
+<!-- ===== KABINET ===== -->
+<section id="kabinet" style="background:#eaf4f1">
+  <div class="section-title"><h2>Susunan Kabinet</h2><p>Pengurus OSFD Periode Ini</p></div>
+  <div class="kabinet-grid" id="kabinetGrid"></div>
+  <div style="max-width:1200px;margin:20px auto 0">
+    <div class="add-btn" onclick="openKabinetModal()">+ Tambah Pengurus</div>
+  </div>
+</section>
+
+<!-- ===== SOSMED ===== -->
+<section id="sosmed">
+  <div class="section-title"><h2>Sosial Media</h2><p>Ikuti kami di berbagai platform</p></div>
+  <div class="sosmed-grid" id="sosmedGrid"></div>
+  <div style="max-width:1000px;margin:20px auto 0">
+    <div class="add-btn" onclick="openSosmedModal()">+ Tambah Sosial Media</div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>© 2026 <span>OSFD</span> — OSIS SMK Daarut Tauhiid Full Day</p>
+  <p style="font-size:.85rem;margin-top:5px">Klik tombol ⚙ di kanan bawah untuk mode admin</p>
+</footer>
+
+<!-- ===== ADMIN FAB ===== -->
+<button class="admin-fab" onclick="toggleAdmin()" title="Mode Admin">⚙</button>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<script>
+/* ================================================
+   DATA STORAGE
+   ================================================ */
+const DB = {
+  get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d } catch { return d } },
+  set(k, v) { localStorage.setItem(k, JSON.stringify(v)) }
+};
+
+/* ================================================
+   DEFAULT DATA
+   ================================================ */
+if (!localStorage.getItem('hero')) {
+  DB.set('hero', {
+    title: 'OSIS',
+    titleHighlight: 'OSFD',
+    subtitle: 'SMK Daarut Tauhiid Full Day',
+    desc: 'Organisasi Siswa Intra Sekolah yang bergerak membentuk generasi berkarakter Islami, berprestasi, dan berjiwa pemimpin.',
+    tags: ['Berkarakter', 'Berprestasi', 'Bertakwa'],
+    btnText: 'Jelajahi OSFD',
+    btnLink: '#visimisi',
+    bg1: '#0d7a5f',
+    bg2: '#1a3a3a'
+  });
+}
+if (!localStorage.getItem('vm')) {
+  DB.set('vm', {
+    visi: 'Mewujudkan siswa SMK Daarut Tauhiid Full Day yang berkarakter Islami, berprestasi, dan berjiwa pemimpin.',
+    misi: [
+      'Meningkatkan keimanan dan ketakwaan melalui kegiatan keagamaan',
+      'Menumbuhkan jiwa kepemimpinan dan kemandirian siswa',
+      'Mengembangkan kreativitas dan prestasi akademik maupun non-akademik',
+      'Membangun solidaritas dan kepedulian sosial antar siswa',
+      'Menjadi jembatan aspirasi siswa kepada pihak sekolah'
+    ]
+  });
+}
+if (!localStorage.getItem('pk')) {
+  DB.set('pk', [
+    { judul:'Rohis Rutin', desc:'Kajian islam setiap pekan untuk meningkatkan keimanan', tanggal:'Setiap Jumat' },
+    { judul:'Bakti Sosial', desc:'Kegiatan sosial ke panti asuhan dan masyarakat sekitar', tanggal:'Semester 2' },
+    { judul:'Classmeeting', desc:'Kompetisi antar kelas usai ujian semester', tanggal:'Desember & Juni' }
+  ]);
+}
+if (!localStorage.getItem('galeri')) {
+  DB.set('galeri', [
+    { url:'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600', caption:'Upacara Pembukaan' },
+    { url:'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=600', caption:'Kegiatan Belajar' },
+    { url:'https://images.unsplash.com/photo-1577896851231-70ef18881754?w=600', caption:'Ekstrakurikuler' }
+  ]);
+}
+if (!localStorage.getItem('kabinet')) {
+  DB.set('kabinet', [
+    { jabatan:'Ketua OSIS', nama:'Ahmad Fauzi', kelas:'XII RPL 1', foto:'' },
+    { jabatan:'Wakil Ketua', nama:'Siti Aisyah', kelas:'XII TKJ 1', foto:'' },
+    { jabatan:'Sekretaris', nama:'Budi Santoso', kelas:'XI MM 1', foto:'' }
+  ]);
+}
+if (!localStorage.getItem('sosmed')) {
+  DB.set('sosmed', [
+    { nama:'Instagram', url:'https://instagram.com/osfd.daaru', icon:'IG' },
+    { nama:'TikTok', url:'https://tiktok.com/@osfd', icon:'TT' },
+    { nama:'YouTube', url:'https://youtube.com/@osfd', icon:'YT' }
+  ]);
+}
+
+/* ================================================
+   UTILITY
+   ================================================ */
+function esc(s) {
+  return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function openModal(html) {
+  document.getElementById('modalContent').innerHTML = html;
+  document.getElementById('modalOverlay').classList.add('active');
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+}
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target.id === 'modalOverlay') closeModal();
+});
+
+/* ================================================
+   RENDER: HERO
+   ================================================ */
+function renderHero() {
+  const h = DB.get('hero', {});
+  document.getElementById('heroTitle').innerHTML = esc(h.title) + ' <span>' + esc(h.titleHighlight) + '</span>';
+  document.getElementById('heroSubtitle').textContent = h.subtitle || '';
+  document.getElementById('heroDesc').textContent = h.desc || '';
+
+  const tagsEl = document.getElementById('heroTags');
+  tagsEl.innerHTML = '';
+  (h.tags || []).forEach(t => {
+    const s = document.createElement('span');
+    s.textContent = t;
+    tagsEl.appendChild(s);
+  });
+
+  const btn = document.getElementById('heroBtn');
+  btn.textContent = h.btnText || 'Jelajahi';
+  btn.href = h.btnLink || '#';
+
+  const hero = document.querySelector('.hero');
+  hero.style.background = `linear-gradient(135deg, ${h.bg1 || '#0d7a5f'}, ${h.bg2 || '#1a3a3a'})`;
+}
+
+/* ================================================
+   RENDER: VISI MISI
+   ================================================ */
+function renderVM() {
+  const vm = DB.get('vm', {});
+  document.getElementById('visiText').textContent = vm.visi || '-';
+  const list = document.getElementById('misiList');
+  list.innerHTML = '';
+  (vm.misi || []).forEach(m => {
+    const li = document.createElement('li');
+    li.textContent = m;
+    list.appendChild(li);
+  });
+}
+
+/* ================================================
+   RENDER: PROGRAM KERJA
+   ================================================ */
+function renderPK() {
+  const data = DB.get('pk', []);
+  const grid = document.getElementById('pkGrid');
+  grid.innerHTML = '';
+  data.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'pk-card';
+    card.innerHTML = `
+      <div class="pk-num">${i+1}</div>
+      <button class="edit-btn" onclick="openPKModal(${i})">✎</button>
+      <h4>${esc(p.judul)}</h4>
+      <p>${esc(p.desc)}</p>
+      <p style="margin-top:10px;font-size:.85rem;color:#888">📅 ${esc(p.tanggal||'-')}</p>`;
+    grid.appendChild(card);
+  });
+}
+
+/* ================================================
+   RENDER: GALERI
+   ================================================ */
+function renderGaleri() {
+  const data = DB.get('galeri', []);
+  const grid = document.getElementById('galeriGrid');
+  grid.innerHTML = '';
+  data.forEach((g, i) => {
+    const item = document.createElement('div');
+    item.className = 'galeri-item';
+    item.innerHTML = `
+      <button class="edit-btn" onclick="event.stopPropagation();openGaleriModal(${i})">✎</button>
+      <img src="${g.url}" alt="${esc(g.caption)}" onerror="this.src='https://via.placeholder.com/400?text=Foto'">
+      <div class="caption">${esc(g.caption||'')}</div>`;
+    item.onclick = () => window.open(g.url, '_blank');
+    grid.appendChild(item);
+  });
+}
+
+/* ================================================
+   RENDER: KABINET
+   ================================================ */
+function renderKabinet() {
+  const data = DB.get('kabinet', []);
+  const grid = document.getElementById('kabinetGrid');
+  grid.innerHTML = '';
+  data.forEach((k, i) => {
+    const card = document.createElement('div');
+    card.className = 'kabinet-card';
+    const initial = (k.nama||'?').charAt(0).toUpperCase();
+    const fotoStyle = k.foto ? `background-image:url('${k.foto}')` : '';
+    card.innerHTML = `
+      <button class="edit-btn" onclick="openKabinetModal(${i})">✎</button>
+      <div class="foto" style="${fotoStyle}">${k.foto?'':initial}</div>
+      <div class="info">
+        <h4>${esc(k.nama)}</h4>
+        <div class="jabatan">${esc(k.jabatan)}</div>
+        <div class="kelas">${esc(k.kelas||'')}</div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+/* ================================================
+   RENDER: SOSMED
+   ================================================ */
+function renderSosmed() {
+  const data = DB.get('sosmed', []);
+  const grid = document.getElementById('sosmedGrid');
+  grid.innerHTML = '';
+  data.forEach((s, i) => {
+    const a = document.createElement('a');
+    a.className = 'sosmed-card';
+    a.href = s.url || '#';
+    a.target = '_blank';
+    a.innerHTML = `
+      <button class="edit-btn" onclick="event.preventDefault();event.stopPropagation();openSosmedModal(${i})">✎</button>
+      <div class="icon">${esc(s.icon||s.nama.charAt(0))}</div>
+      <div>
+        <div class="nama">${esc(s.nama)}</div>
+        <div class="url">${esc(s.url||'')}</div>
+      </div>`;
+    grid.appendChild(a);
+  });
+}
+
+function renderAll() {
+  renderHero(); renderVM(); renderPK(); renderGaleri(); renderKabinet(); renderSosmed();
+}
+
+/* ================================================
+   HERO EDIT
+   ================================================ */
+function openHeroModal() {
+  const h = DB.get('hero', {});
+  const tagsStr = (h.tags || []).join(', ');
+  const html = `
+    <h3>✎ Edit Tampilan Beranda</h3>
+
+    <label>Judul Utama (bagian 1)</label>
+    <input id="hTitle" value="${esc(h.title)}" placeholder="OSIS">
+    <div class="hint">Contoh: "OSIS"</div>
+
+    <label>Judul Utama (bagian highlight / warna kuning)</label>
+    <input id="hHighlight" value="${esc(h.titleHighlight)}" placeholder="OSFD">
+    <div class="hint">Contoh: "OSFD"</div>
+
+    <label>Subtitle</label>
+    <input id="hSub" value="${esc(h.subtitle)}" placeholder="SMK Daarut Tauhiid Full Day">
+
+    <label>Deskripsi</label>
+    <textarea id="hDesc">${esc(h.desc)}</textarea>
+
+    <label>Tag / Label (pisah dengan koma)</label>
+    <input id="hTags" value="${esc(tagsStr)}" placeholder="Berkarakter, Berprestasi, Bertakwa">
+    <div class="hint">Contoh: Berkarakter, Berprestasi, Bertakwa</div>
+
+    <label>Teks Tombol</label>
+    <input id="hBtnText" value="${esc(h.btnText)}" placeholder="Jelajahi OSFD">
+
+    <label>Link Tombol</label>
+    <input id="hBtnLink" value="${esc(h.btnLink)}" placeholder="#visimisi">
+    <div class="hint">Gunakan #id-section untuk scroll, atau URL lengkap</div>
+
+    <label>Warna Background Gradient</label>
+    <div class="color-row">
+      <input type="color" id="hBg1" value="${h.bg1||'#0d7a5f'}">
+      <input type="text" id="hBg1Text" value="${h.bg1||'#0d7a5f'}" placeholder="#0d7a5f">
+    </div>
+    <div class="color-row" style="margin-top:8px">
+      <input type="color" id="hBg2" value="${h.bg2||'#1a3a3a'}">
+      <input type="text" id="hBg2Text" value="${h.bg2||'#1a3a3a'}" placeholder="#1a3a3a">
+    </div>
+    <div class="hint">Warna 1 (kiri atas) → Warna 2 (kanan bawah)</div>
+
+    <div class="btn-group">
+      <button class="btn-cancel" onclick="closeModal()">Batal</button>
+      <button class="btn-save" onclick="saveHero()">💾 Simpan</button>
+    </div>`;
+  openModal(html);
+
+  // Sync color picker ↔ text input
+  document.getElementById('hBg1').addEventListener('input', e => document.getElementById('hBg1Text').value = e.target.value);
+  document.getElementById('hBg1Text').addEventListener('input', e => { if(/^#[0-9a-fA-F]{6}$/.test(e.target.value)) document.getElementById('hBg1').value = e.target.value; });
+  document.getElementById('hBg2').addEventListener('input', e => document.getElementById('hBg2Text').value = e.target.value);
+  document.getElementById('hBg2Text').addEventListener('input', e => { if(/^#[0-9a-fA-F]{6}$/.test(e.target.value)) document.getElementById('hBg2').value = e.target.value; });
+}
+
+function saveHero() {
+  const tagsRaw = document.getElementById('hTags').value;
+  const tags = tagsRaw.split(',').map(t => t.trim()).filter(Boolean);
+  const obj = {
+    title: document.getElementById('hTitle').value,
+    titleHighlight: document.getElementById('hHighlight').value,
+    subtitle: document.getElementById('hSub').value,
+    desc: document.getElementById('hDesc').value,
+    tags: tags,
+    btnText: document.getElementById('hBtnText').value,
+    btnLink: document.getElementById('hBtnLink').value,
+    bg1: document.getElementById('hBg1Text').value || '#0d7a5f',
+    bg2: document.getElementById('hBg2Text').value || '#1a3a3a'
+  };
+  DB.set('hero', obj);
+  closeModal();
+  renderHero();
+}
+
+/* ================================================
+   VISI MISI EDIT
+   ================================================ */
+function editVM(type) {
+  const vm = DB.get('vm', {});
+  let html = `<h3>Edit ${type==='visi'?'Visi':'Misi'}</h3>`;
+  if (type === 'visi') {
+    html += `<label>Visi</label><textarea id="fVisi">${esc(vm.visi||'')}</textarea>`;
+  } else {
+    html += `<label>Misi (satu per baris)</label><textarea id="fMisi" style="min-height:150px">${(vm.misi||[]).join('\n')}</textarea>`;
+  }
+  html += `<div class="btn-group">
+    <button class="btn-cancel" onclick="closeModal()">Batal</button>
+    <button class="btn-save" onclick="saveVM('${type}')">Simpan</button>
+  </div>`;
+  openModal(html);
+}
+function saveVM(type) {
+  const vm = DB.get('vm', {});
+  if (type === 'visi') vm.visi = document.getElementById('fVisi').value;
+  else vm.misi = document.getElementById('fMisi').value.split('\n').filter(x => x.trim());
+  DB.set('vm', vm);
+  closeModal(); renderVM();
+}
+
+/* ================================================
+   PROGRAM KERJA
+   ================================================ */
+function openPKModal(idx) {
+  const data = DB.get('pk', []);
+  const isEdit = idx !== undefined;
+  const p = isEdit ? data[idx] : { judul:'', desc:'', tanggal:'' };
+  openModal(`<h3>${isEdit?'Edit':'Tambah'} Program Kerja</h3>
+    <label>Judul</label><input id="fJudul" value="${esc(p.judul)}">
+    <label>Deskripsi</label><textarea id="fDesc">${esc(p.desc)}</textarea>
+    <label>Waktu / Jadwal</label><input id="fTgl" value="${esc(p.tanggal||'')}">
+    <div class="btn-group">
+      ${isEdit?'<button class="btn-delete" onclick="deletePK('+idx+')">Hapus</button>':''}
+      <button class="btn-cancel" onclick="closeModal()">Batal</button>
+      <button class="btn-save" onclick="savePK(${isEdit?idx:'null'})">Simpan</button>
+    </div>`);
+}
+function savePK(idx) {
+  const data = DB.get('pk', []);
+  const obj = { judul:document.getElementById('fJudul').value, desc:document.getElementById('fDesc').value, tanggal:document.getElementById('fTgl').value };
+  if (idx===null) data.push(obj); else data[idx]=obj;
+  DB.set('pk',data); closeModal(); renderPK();
+}
+function deletePK(idx) {
+  if(!confirm('Hapus program kerja ini?')) return;
+  const d=DB.get('pk',[]); d.splice(idx,1); DB.set('pk',d); closeModal(); renderPK();
+}
+
+/* ================================================
+   GALERI
+   ================================================ */
+function openGaleriModal(idx) {
+  const data = DB.get('galeri', []);
+  const isEdit = idx !== undefined;
+  const g = isEdit ? data[idx] : { url:'', caption:'' };
+  openModal(`<h3>${isEdit?'Edit':'Tambah'} Foto</h3>
+    <label>URL Gambar</label><input id="fUrl" value="${esc(g.url)}" placeholder="https://...">
+    <label>Atau Upload dari Komputer</label>
+    <input type="file" id="fFile" accept="image/*" style="margin-top:5px">
+    <label>Caption</label><input id="fCap" value="${esc(g.caption||'')}">
+    <div class="btn-group">
+      ${isEdit?'<button class="btn-delete" onclick="deleteGaleri('+idx+')">Hapus</button>':''}
+      <button class="btn-cancel" onclick="closeModal()">Batal</button>
+      <button class="btn-save" onclick="saveGaleri(${isEdit?idx:'null'})">Simpan</button>
+    </div>`);
+  document.getElementById('fFile').addEventListener('change', e => {
+    const f=e.target.files[0]; if(!f) return;
+    const r=new FileReader(); r.onload=()=>document.getElementById('fUrl').value=r.result; r.readAsDataURL(f);
+  });
+}
+function saveGaleri(idx) {
+  const data=DB.get('galeri',[]);
+  const obj={url:document.getElementById('fUrl').value, caption:document.getElementById('fCap').value};
+  if(!obj.url){alert('URL gambar wajib diisi!');return}
+  if(idx===null) data.push(obj); else data[idx]=obj;
+  DB.set('galeri',data); closeModal(); renderGaleri();
+}
+function deleteGaleri(idx) {
+  if(!confirm('Hapus foto ini?')) return;
+  const d=DB.get('galeri',[]); d.splice(idx,1); DB.set('galeri',d); closeModal(); renderGaleri();
+}
+
+/* ================================================
+   KABINET
+   ================================================ */
+function openKabinetModal(idx) {
+  const data=DB.get('kabinet',[]);
+  const isEdit=idx!==undefined;
+  const k=isEdit?data[idx]:{jabatan:'',nama:'',kelas:'',foto:''};
+  openModal(`<h3>${isEdit?'Edit':'Tambah'} Pengurus</h3>
+    <label>Jabatan</label><input id="fJab" value="${esc(k.jabatan)}">
+    <label>Nama Lengkap</label><input id="fNama" value="${esc(k.nama)}">
+    <label>Kelas</label><input id="fKelas" value="${esc(k.kelas||'')}">
+    <label>Foto (URL)</label><input id="fFoto" value="${esc(k.foto||'')}" placeholder="https://...">
+    <label>Atau Upload Foto</label>
+    <input type="file" id="fFotoFile" accept="image/*" style="margin-top:5px">
+    <div class="btn-group">
+      ${isEdit?'<button class="btn-delete" onclick="deleteKabinet('+idx+')">Hapus</button>':''}
+      <button class="btn-cancel" onclick="closeModal()">Batal</button>
+      <button class="btn-save" onclick="saveKabinet(${isEdit?idx:'null'})">Simpan</button>
+    </div>`);
+  document.getElementById('fFotoFile').addEventListener('change', e => {
+    const f=e.target.files[0]; if(!f) return;
+    const r=new FileReader(); r.onload=()=>document.getElementById('fFoto').value=r.result; r.readAsDataURL(f);
+  });
+}
+function saveKabinet(idx) {
+  const data=DB.get('kabinet',[]);
+  const obj={jabatan:document.getElementById('fJab').value,nama:document.getElementById('fNama').value,kelas:document.getElementById('fKelas').value,foto:document.getElementById('fFoto').value};
+  if(!obj.nama||!obj.jabatan){alert('Nama & jabatan wajib diisi!');return}
+  if(idx===null) data.push(obj); else data[idx]=obj;
+  DB.set('kabinet',data); closeModal(); renderKabinet();
+}
+function deleteKabinet(idx) {
+  if(!confirm('Hapus pengurus ini?')) return;
+  const d=DB.get('kabinet',[]); d.splice(idx,1); DB.set('kabinet',d); closeModal(); renderKabinet();
+}
+
+/* ================================================
+   SOSMED
+   ================================================ */
+function openSosmedModal(idx) {
+  const data=DB.get('sosmed',[]);
+  const isEdit=idx!==undefined;
+  const s=isEdit?data[idx]:{nama:'',url:'',icon:''};
+  openModal(`<h3>${isEdit?'Edit':'Tambah'} Sosial Media</h3>
+    <label>Nama Platform</label><input id="fNama" value="${esc(s.nama)}" placeholder="Instagram, TikTok, ...">
+    <label>URL / Link</label><input id="fUrl" value="${esc(s.url)}" placeholder="https://...">
+    <label>Icon / Singkatan (1-3 huruf)</label><input id="fIcon" value="${esc(s.icon||'')}" maxlength="3">
+    <div class="btn-group">
+      ${isEdit?'<button class="btn-delete" onclick="deleteSosmed('+idx+')">Hapus</button>':''}
+      <button class="btn-cancel" onclick="closeModal()">Batal</button>
+      <button class="btn-save" onclick="saveSosmed(${isEdit?idx:'null'})">Simpan</button>
+    </div>`);
+}
+function saveSosmed(idx) {
+  const data=DB.get('sosmed',[]);
+  const obj={nama:document.getElementById('fNama').value,url:document.getElementById('fUrl').value,icon:document.getElementById('fIcon').value};
+  if(!obj.nama){alert('Nama platform wajib diisi!');return}
+  if(idx===null) data.push(obj); else data[idx]=obj;
+  DB.set('sosmed',data); closeModal(); renderSosmed();
+}
+function deleteSosmed(idx) {
+  if(!confirm('Hapus sosial media ini?')) return;
+  const d=DB.get('sosmed',[]); d.splice(idx,1); DB.set('sosmed',d); closeModal(); renderSosmed();
+}
+
+/* ================================================
+   ADMIN MODE
+   ================================================ */
+function toggleAdmin() {
+  if (document.body.classList.contains('admin-mode')) {
+    document.body.classList.remove('admin-mode');
+    alert('🔒 Mode admin dinonaktifkan');
+  } else {
+    const pw = prompt('Masukkan password admin:');
+    if (pw === 'osfd2026') {
+      document.body.classList.add('admin-mode');
+      alert('✅ Mode admin aktif!\n\n• Klik ✎ untuk edit\n• Klik + untuk tambah data\n• Klik "Edit Tampilan" di hero untuk ubah halaman utama');
+    } else if (pw !== null) {
+      alert('❌ Password salah!\n(Default: osfd2026)');
+    }
+  }
+}
+
+/* ================================================
+   INIT
+   ================================================ */
+renderAll();
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior:'smooth' });
+    document.getElementById('navMenu').classList.remove('show');
+  });
+});
+</script>
+</body>
+</html>
